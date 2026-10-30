@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "doory-guide": {
+      "command": "node",
+      "args": [
+        "mcp-server.mjs"
+      ]
+    }
+  }
+}

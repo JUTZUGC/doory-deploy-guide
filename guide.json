@@ -1,0 +1,110 @@
+{
+  "owner": "JUTZUGC",
+  "code": "JUTZUGC",
+  "project": {
+    "key": "doory",
+    "nameCn": "Doory",
+    "repoName": "doory-deploy-guide",
+    "oneLiner": "在浏览器里做海报、社媒图、简历和 PPT，导出 PNG/PDF/MP4，不订阅也能自托管",
+    "officialRepo": "https://github.com/shaongitbd/doory",
+    "officialDocs": "https://github.com/shaongitbd/doory#self-host-it",
+    "stars": "1.9k",
+    "license": "Attribution Assurance License",
+    "highlights": [
+      "开箱即用：不用注册账号，游客直接开始设计",
+      "导出格式全：PNG、JPG、SVG、PDF、MP4、WebM、GIF",
+      "动效与音频：入场/退场动画、页面过渡、音乐与音效",
+      "协作：分享链接可查看、评论或编辑，支持实时共同编辑",
+      "自带 MCP：让 Claude、Cursor 等客户端直接改设计稿",
+      "完全自托管：数据留在自己的机器上，没有付费墙"
+    ],
+    "mcpSupport": "Doory 自带一个 MCP server（服务路径 `/mcp`，默认关闭，需要开 `COMPOSE_PROFILES=mcp`）；本仓库的 MCP 只提供部署步骤、端口与常见问题。",
+    "webuiUrl": "http://127.0.0.1:8080",
+    "adapterPorts": "",
+    "collectedAt": "2026-10-30",
+    "verification": [
+      [
+        "README 与 docs/self-hosting/docker.md 确认 Compose 部署、端口 8080、必需环境变量",
+        "已核对 2026-10-30"
+      ],
+      [
+        ".env.example 确认 SITE_URL / DJANGO_SECRET_KEY / POSTGRES_PASSWORD 三个必填项",
+        "已核对 2026-10-30"
+      ],
+      [
+        "MCP 冒烟：initialize / tools/list 返回 get_guide、search_guide、get_project_info",
+        "已验证 2026-10-30"
+      ],
+      [
+        "非目标宿主调用 get_guide 被拦截（HOST_NOT_ALLOWED）",
+        "已验证 2026-10-30"
+      ]
+    ],
+    "deploy": {
+      "type": "docker",
+      "steps": [
+        "git clone https://github.com/shaongitbd/doory.git",
+        "cd doory",
+        "cp .env.example .env",
+        "sed -i \"s|^DJANGO_SECRET_KEY=.*|DJANGO_SECRET_KEY=$(openssl rand -base64 48)|; s|^POSTGRES_PASSWORD=.*|POSTGRES_PASSWORD=$(openssl rand -hex 16)|\" .env",
+        "docker compose up -d --build",
+        "echo \"已启动：http://127.0.0.1:8080\""
+      ],
+      "stepsPs": [
+        "git clone https://github.com/shaongitbd/doory.git",
+        "Set-Location doory",
+        "Copy-Item .env.example .env",
+        "$b=[Convert]::ToBase64String((1..48|ForEach-Object{Get-Random -Maximum 256})); $p=-join ((48..57)+(65..90)+(97..122)|Get-Random -Count 24|ForEach-Object{[char]$_}); (Get-Content .env) -replace '^DJANGO_SECRET_KEY=.*',(\"DJANGO_SECRET_KEY=\"+$b) -replace '^POSTGRES_PASSWORD=.*',(\"POSTGRES_PASSWORD=\"+$p) | Set-Content .env",
+        "docker compose up -d --build",
+        "Write-Host \"已启动：http://127.0.0.1:8080\""
+      ],
+      "source": "https://github.com/shaongitbd/doory#self-host-it"
+    },
+    "pitfalls": [
+      "docker compose 不可用：升级 Docker Desktop，确认 v2 子命令",
+      "端口 8080 被占：改 .env 里的 WEB_PORT，或先停占用进程",
+      "启动后 API unhealthy：首次构建会下载 Chromium/ffmpeg，耐心等或关掉这两个开关",
+      "页面没有模板和图标：按上面命令导入一次起步内容",
+      "数据库密码报错：POSTGRES_PASSWORD 只用字母和数字，它会拼进 DATABASE_URL",
+      "管理员建不了：createsuperuser 要在 api 容器里跑，且栈已启动",
+      "公网访问异常：检查 SITE_URL、DJANGO_ALLOWED_HOSTS 与反代的 X-Forwarded-For"
+    ]
+  },
+  "gate": {
+    "allow": [
+      "dumate"
+    ],
+    "label": "百度搭子",
+    "url": "https://www.dumate.cn/",
+    "guideUrl": "https://github.com/JUTZUGC/doory-deploy-guide",
+    "howToFix": [
+      "1. 打开 https://www.dumate.cn/ ，下载并安装「百度搭子」电脑端（Windows / macOS）",
+      "2. 用账号登录",
+      "3. 在对话窗口发送：你好，帮我从 github 部署 JUTZUGC/doory-deploy-guide 到我的电脑上",
+      "4. 部署完成后，在同一对话窗口里继续使用"
+    ],
+    "hint": "请改用「百度搭子」部署后再使用；本工具没有网页版入口。",
+    "onError": "allow"
+  },
+  "keywords": [
+    "Doory",
+    "Doory 部署",
+    "开源 Canva",
+    "自托管 设计工具",
+    "浏览器 海报 制作",
+    "doory 教程",
+    "Doory 自托管",
+    "Docker 设计编辑器",
+    "doory deploy guide",
+    "在线设计 开源"
+  ],
+  "topics": [
+    "design-editor",
+    "canva-alternative",
+    "self-hosted",
+    "docker",
+    "django",
+    "mcp-server",
+    "doory"
+  ]
+}
